@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>給付金相談 予約フォーム</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
+      font-family: "Yu Gothic", "Hiragino Sans", sans-serif;
+      color: #222;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .sub {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.8;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin: 30px 0 15px;
+      font-weight: bold;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .required {
+      color: #d93025;
+      margin-left: 5px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d0d7de;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #fff;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #4f8cff;
+      box-shadow: 0 0 0 3px rgba(79,140,255,0.15);
+    }
+
+    .row {
+      display: flex;
+      gap: 15px;
+    }
+
+    .row .field {
+      flex: 1;
+    }
+
+    .date-buttons,
+    .time-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .select-btn {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #d0d7de;
+      background: #fff;
+      cursor: pointer;
+      transition: all .2s;
+      font-size: 14px;
+    }
+
+    .select-btn:hover {
+      background: #f0f6ff;
+      border-color: #4f8cff;
+    }
+
+    .select-btn.active {
+      background: #4f8cff;
+      color: #fff;
+      border-color: #4f8cff;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 14px;
+      background: #1a73e8;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: .2s;
+      margin-top: 30px;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+
+    .submit-btn:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      line-height: 1.8;
+      display: none;
+    }
+
+    .success {
+      background: #edf8ed;
+      color: #1b5e20;
+    }
+
+    .error {
+      background: #ffecec;
+      color: #c62828;
+    }
+
+    .loading {
+      text-align: center;
+      margin: 20px 0;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 0;
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 24px;
+      }
+
+      .row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <h1>給付金相談予約フォーム</h1>
+
+    <div class="sub">
+      必要事項をご入力のうえ<br>
+      ご希望日時を選択してください。
+    </div>
+
+    <div class="section-title">お客様情報</div>
+
+    <div class="row">
+      <div class="field">
+        <label>姓<span class="required">*</span></label>
+        <input type="text" id="lastName" placeholder="例：山田">
+      </div>
+
+      <div class="field">
+        <label>名<span class="required">*</span></label>
+        <input type="text" id="firstName" placeholder="例：太郎">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>セイ<span class="required">*</span></label>
+        <input type="text" id="lastNameKana" placeholder="例：ヤマダ">
+      </div>
+
+      <div class="field">
+        <label>メイ<span class="required">*</span></label>
+        <input type="text" id="firstNameKana" placeholder="例：タロウ">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>年齢<span class="required">*</span></label>
+      <input type="number" id="age" placeholder="例：35">
+    </div>
+
+    <div class="field">
+      <label>メールアドレス<span class="required">*</span></label>
+      <input type="email" id="email" placeholder="example@gmail.com">
+    </div>
+
+    <div class="field">
+      <label>携帯番号<span class="required">*</span></label>
+      <input type="tel" id="phone" placeholder="09012345678">
+    </div>
+
+    <div class="field">
+      <label>携帯番号（確認用）<span class="required">*</span></label>
+      <input type="tel" id="phoneConfirm" placeholder="09012345678">
+    </div>
+
+    <div class="field">
+      <label>勤続年数<span class="required">*</span></label>
+      <input type="text" id="yearsOfService" placeholder="例：3年2ヶ月">
+    </div>
+
+    <div class="field">
+      <label>退職予定日<span class="required">*</span></label>
+      <input type="date" id="retirementDate">
+    </div>
+
+    <div class="field">
+      <label>社会保険加入<span class="required">*</span></label>
+      <select id="socialInsurance">
+        <option value="">選択してください</option>
+        <option value="あり">あり</option>
+        <option value="なし">なし</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>雇用保険加入<span class="required">*</span></label>
+      <select id="employmentInsurance">
+        <option value="">選択してください</option>
+        <option value="あり">あり</option>
+        <option value="なし">なし</option>
+      </select>
+    </div>
+
+    <div class="section-title">予約日時</div>
+
+    <div id="loading" class="loading">
+      空き枠を読み込み中...
+    </div>
+
+    <div id="dateArea" style="display:none;">
+      <label>日付を選択<span class="required">*</span></label>
+      <div id="dateButtons" class="date-buttons"></div>
+    </div>
+
+    <div id="timeArea" style="display:none; margin-top:20px;">
+      <label>時間を選択<span class="required">*</span></label>
+      <div id="timeButtons" class="time-buttons"></div>
+    </div>
+
+    <button id="submitBtn" class="submit-btn">
+      予約を確定する
+    </button>
+
+    <div id="successMessage" class="message success"></div>
+    <div id="errorMessage" class="message error"></div>
+
+  </div>
+
+  <script>
+
+    // =========================
+    // GAS WebApp URL
+    // =========================
+
+    const GAS_API_URL = 'ここにGASのexec URLを貼る';
+
+    // =========================
+    // 状態管理
+    // =========================
+
+    let selectedDate = '';
+    let selectedTime = '';
+    let slotData = [];
+
+    // =========================
+    // 初期化
+    // =========================
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadSlots();
+    });
+
+    // =========================
+    // 空き枠取得
+    // =========================
+
+    async function loadSlots() {
+      try {
+
+        const response = await fetch(`${GAS_API_URL}?action=slots`);
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.message || '空き枠取得失敗');
+        }
+
+        slotData = data.dates || [];
+
+        renderDates();
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('dateArea').style.display = 'block';
+
+      } catch (error) {
+        showError(error.message || '空き枠取得に失敗しました');
+      }
+    }
+
+    // =========================
+    // 日付表示
+    // =========================
+
+    function renderDates() {
+
+      const wrap = document.getElementById('dateButtons');
+      wrap.innerHTML = '';
+
+      slotData.forEach(item => {
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'select-btn';
+        btn.textContent = item.label;
+
+        btn.onclick = () => {
+
+          document.querySelectorAll('#dateButtons .select-btn').forEach(el => {
+            el.classList.remove('active');
+          });
+
+          btn.classList.add('active');
+
+          selectedDate = item.value;
+          selectedTime = '';
+
+          renderTimes(item.times);
+        };
+
+        wrap.appendChild(btn);
+      });
+    }
+
+    // =========================
+    // 時間表示
+    // =========================
+
+    function renderTimes(times) {
+
+      const wrap = document.getElementById('timeButtons');
+      wrap.innerHTML = '';
+
+      times.forEach(item => {
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'select-btn';
+        btn.textContent = item.label;
+
+        btn.onclick = () => {
+
+          document.querySelectorAll('#timeButtons .select-btn').forEach(el => {
+            el.classList.remove('active');
+          });
+
+          btn.classList.add('active');
+
+          selectedTime = item.start;
+        };
+
+        wrap.appendChild(btn);
+      });
+
+      document.getElementById('timeArea').style.display = 'block';
+    }
+
+    // =========================
+    // 送信
+    // =========================
+
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+
+      try {
+
+        clearMessages();
+
+        const payload = {
+          lastName: safeTrim(document.getElementById('lastName').value),
+          firstName: safeTrim(document.getElementById('firstName').value),
+          lastNameKana: safeTrim(document.getElementById('lastNameKana').value),
+          firstNameKana: safeTrim(document.getElementById('firstNameKana').value),
+          age: safeTrim(document.getElementById('age').value),
+          email: safeTrim(document.getElementById('email').value),
+          phone: safeTrim(document.getElementById('phone').value),
+          phoneConfirm: safeTrim(document.getElementById('phoneConfirm').value),
+          yearsOfService: safeTrim(document.getElementById('yearsOfService').value),
+          retirementDate: safeTrim(document.getElementById('retirementDate').value),
+          socialInsurance: safeTrim(document.getElementById('socialInsurance').value),
+          employmentInsurance: safeTrim(document.getElementById('employmentInsurance').value),
+          bookingDate: selectedDate,
+          bookingStartTime: selectedTime,
+        };
+
+        validate(payload);
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '送信中...';
+
+        const response = await fetch(GAS_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.message || '予約に失敗しました');
+        }
+
+        showSuccess(`
+予約が完了しました。\n\n
+【予約日時】\n
+${result.bookingDate} ${result.bookingStartTime}〜${result.bookingEndTime}\n\n
+【予約管理URL】\n
+${result.managementUrl}
+        `);
+
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+
+      } catch (error) {
+
+        showError(error.message || '送信に失敗しました');
+
+      } finally {
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = false;
+        submitBtn.textContent = '予約を確定する';
+      }
+    });
+
+    // =========================
+    // バリデーション
+    // =========================
+
+    function validate(payload) {
+
+      const requiredFields = {
+        lastName: '姓',
+        firstName: '名',
+        lastNameKana: 'セイ',
+        firstNameKana: 'メイ',
+        age: '年齢',
+        email: 'メールアドレス',
+        phone: '携帯番号',
+        phoneConfirm: '携帯番号（確認用）',
+        yearsOfService: '勤続年数',
+        retirementDate: '退職予定日',
+        socialInsurance: '社会保険加入',
+        employmentInsurance: '雇用保険加入',
+        bookingDate: '予約日',
+        bookingStartTime: '予約時間',
+      };
+
+      for (const key in requiredFields) {
+        if (!payload[key]) {
+          throw new Error(`${requiredFields[key]}を入力してください`);
+        }
+      }
+
+      const phone = payload.phone.replace(/\D/g, '');
+      const phoneConfirm = payload.phoneConfirm.replace(/\D/g, '');
+
+      if (!/^0\d{10}$/.test(phone)) {
+        throw new Error('携帯番号は11桁で入力してください');
+      }
+
+      if (phone !== phoneConfirm) {
+        throw new Error('携帯番号と確認用が一致しません');
+      }
+    }
+
+    // =========================
+    // メッセージ表示
+    // =========================
+
+    function showSuccess(message) {
+      const el = document.getElementById('successMessage');
+      el.style.display = 'block';
+      el.textContent = message;
+    }
+
+    function showError(message) {
+      const el = document.getElementById('errorMessage');
+      el.style.display = 'block';
+      el.textContent = message;
+    }
+
+    function clearMessages() {
+      document.getElementById('successMessage').style.display = 'none';
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    // =========================
+    // Utility
+    // =========================
+
+    function safeTrim(value) {
+      return String(value || '').trim();
+    }
+
+  </script>
+
+</body>
+</html>
