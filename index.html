@@ -264,9 +264,7 @@
 
     <div class="section-title">予約日時</div>
 
-    <div id="loading" class="loading">
-      空き枠を読み込み中...
-    </div>
+    <div id="loading" class="loading">空き枠を読み込み中...</div>
 
     <div id="dateArea" style="display:none;">
       <label>日付を選択<span class="required">*</span></label>
@@ -278,9 +276,7 @@
       <div id="timeButtons" class="time-buttons"></div>
     </div>
 
-    <button id="submitBtn" class="submit-btn">
-      予約を確定する
-    </button>
+    <button id="submitBtn" class="submit-btn">予約を確定する</button>
 
     <div id="successMessage" class="message success"></div>
     <div id="errorMessage" class="message error"></div>
@@ -288,33 +284,16 @@
   </div>
 
   <script>
-
-    // =========================
-    // GAS WebApp URL
-    // =========================
-    // ここだけ自分のGAS WebアプリURLに差し替えてください。
-
     const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbx8qeNKEW0738wMOXEtGpqm8yBiEJbqDd1F6F9ibkk1PbF1hkZHxULdelJzZ5m40CPx/exec';
-
-    // =========================
-    // 状態管理
-    // =========================
 
     let selectedDate = '';
     let selectedTime = '';
     let slotData = [];
-
-    // =========================
-    // 初期化
-    // =========================
+    let isSubmitting = false;
 
     window.addEventListener('DOMContentLoaded', async () => {
       await loadSlots();
     });
-
-    // =========================
-    // 空き枠取得
-    // =========================
 
     async function loadSlots() {
       try {
@@ -348,10 +327,6 @@
       }
     }
 
-    // =========================
-    // 日付表示
-    // =========================
-
     function renderDates() {
       const wrap = document.getElementById('dateButtons');
       wrap.innerHTML = '';
@@ -379,10 +354,6 @@
       });
     }
 
-    // =========================
-    // 時間表示
-    // =========================
-
     function renderTimes(times) {
       const wrap = document.getElementById('timeButtons');
       wrap.innerHTML = '';
@@ -408,14 +379,13 @@
       document.getElementById('timeArea').style.display = 'block';
     }
 
-    // =========================
-    // 送信
-    // =========================
-
     document.getElementById('submitBtn').addEventListener('click', async () => {
       const submitBtn = document.getElementById('submitBtn');
 
+      if (isSubmitting) return;
+
       try {
+        isSubmitting = true;
         clearMessages();
 
         const payload = {
@@ -432,7 +402,7 @@
           socialInsurance: safeTrim(document.getElementById('socialInsurance').value),
           employmentInsurance: safeTrim(document.getElementById('employmentInsurance').value),
           bookingDate: selectedDate,
-          bookingStartTime: selectedTime,
+          bookingStartTime: selectedTime
         };
 
         validate(payload);
@@ -479,14 +449,11 @@
         showError(error.message || '送信に失敗しました');
 
       } finally {
+        isSubmitting = false;
         submitBtn.disabled = false;
         submitBtn.textContent = '予約を確定する';
       }
     });
-
-    // =========================
-    // バリデーション
-    // =========================
 
     function validate(payload) {
       const requiredFields = {
@@ -503,7 +470,7 @@
         socialInsurance: '社会保険加入',
         employmentInsurance: '雇用保険加入',
         bookingDate: '予約日',
-        bookingStartTime: '予約時間',
+        bookingStartTime: '予約時間'
       };
 
       for (const key in requiredFields) {
@@ -525,10 +492,6 @@
       }
     }
 
-    // =========================
-    // メッセージ表示
-    // =========================
-
     function showSuccess(message) {
       const el = document.getElementById('successMessage');
       el.style.display = 'block';
@@ -548,10 +511,6 @@
       document.getElementById('errorMessage').textContent = '';
     }
 
-    // =========================
-    // Utility
-    // =========================
-
     function safeTrim(value) {
       return String(value || '').trim();
     }
@@ -559,7 +518,6 @@
     function normalizePhone(value) {
       return String(value || '').replace(/\D/g, '');
     }
-
   </script>
 
 </body>
