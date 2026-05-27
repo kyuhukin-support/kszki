@@ -143,11 +143,6 @@
       white-space: pre-wrap;
     }
 
-    .success {
-      background: #edf8ed;
-      color: #1b5e20;
-    }
-
     .error {
       background: #ffecec;
       color: #c62828;
@@ -278,7 +273,6 @@
 
     <button id="submitBtn" class="submit-btn">予約を確定する</button>
 
-    <div id="successMessage" class="message success"></div>
     <div id="errorMessage" class="message error"></div>
 
   </div>
@@ -430,30 +424,31 @@
           throw new Error(result.message || '予約に失敗しました');
         }
 
-        showSuccess([
-          '予約が完了しました。',
-          '',
-          '【予約日時】',
-          `${result.bookingDate} ${result.bookingStartTime}〜${result.bookingEndTime}`,
-          '',
-          '【予約管理URL】',
-          result.managementUrl || ''
-        ].join('\n'));
-
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth'
-        });
+        redirectToCompletePage(result, payload);
 
       } catch (error) {
         showError(error.message || '送信に失敗しました');
 
-      } finally {
         isSubmitting = false;
         submitBtn.disabled = false;
         submitBtn.textContent = '予約を確定する';
       }
     });
+
+    function redirectToCompletePage(result, payload) {
+      const fullName = result.fullName || `${payload.lastName}${payload.firstName}`;
+
+      const params = new URLSearchParams({
+        bookingDate: result.bookingDate || '',
+        bookingStartTime: result.bookingStartTime || '',
+        bookingEndTime: result.bookingEndTime || '',
+        fullName: fullName,
+        bookingId: result.bookingId || '',
+        managementUrl: result.managementUrl || ''
+      });
+
+      window.location.href = '/complete.html?' + params.toString();
+    }
 
     function validate(payload) {
       const requiredFields = {
@@ -492,12 +487,6 @@
       }
     }
 
-    function showSuccess(message) {
-      const el = document.getElementById('successMessage');
-      el.style.display = 'block';
-      el.textContent = message;
-    }
-
     function showError(message) {
       const el = document.getElementById('errorMessage');
       el.style.display = 'block';
@@ -505,8 +494,6 @@
     }
 
     function clearMessages() {
-      document.getElementById('successMessage').style.display = 'none';
-      document.getElementById('successMessage').textContent = '';
       document.getElementById('errorMessage').style.display = 'none';
       document.getElementById('errorMessage').textContent = '';
     }
