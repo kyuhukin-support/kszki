@@ -156,7 +156,7 @@
   <div class="wrap">
     <div class="card">
       <h1>日程調整ページ</h1>
-      <p>ご希望の日付と時間を選択し、その後に必要情報をご入力ください。</p>
+      <p>面談は「給付金サポートデスク」からのLINE通話で行います。<br>ご希望の日付と時間を選択し、その後に必要情報をご入力ください。<br>面談枠の確保後、通話用LINEの追加をご案内します。</p>
       <div class="loading" id="loadingSlots">空き枠を読み込み中です...</div>
     </div>
 
@@ -245,7 +245,8 @@
       </div>
 
       <div class="submit-row">
-        <button class="btn" id="submitBtn" type="button">次に進む</button>
+        <p style="margin-bottom: 12px; font-size: 14px;">次のボタンを押すと、選択した日時の面談枠が確保されます。<br>続く画面で、通話用LINEの追加と予約情報の送信をお願いします。</p>
+        <button class="btn" id="submitBtn" type="button">面談枠を確保して次へ</button>
       </div>
 
       <div class="error" id="errorBox"></div>
@@ -474,7 +475,7 @@
         if (!response.ok || !result.success) {
           isSubmitting = false;
           submitBtn.disabled = false;
-          submitBtn.textContent = "次に進む";
+          submitBtn.textContent = "面談枠を確保して次へ";
           return showError(result.message || '送信に失敗しました。');
         }
 
@@ -483,7 +484,7 @@
       } catch (error) {
         isSubmitting = false;
         submitBtn.disabled = false;
-        submitBtn.textContent = "次に進む";
+        submitBtn.textContent = "面談枠を確保して次へ";
         showError("通信エラーが発生しました。");
       }
     });
