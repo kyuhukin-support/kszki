@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>予約手続き</title>
+  <title>面談枠の確保完了</title>
   <style>
     * {
       box-sizing: border-box;
@@ -150,28 +150,37 @@
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>予約手続きはまだ完了していません</h1>
+      <h1>面談枠を確保しました</h1>
       <p class="lead">
-        下記の内容をご確認ください。<br>
-        下の緑のボタンからLINE追加とメッセージ送信をお願いします。<br>受付後、予約確定となります。
+        下記の日時で面談枠を確保しています。<br>
+        続いて、当日のLINE通話の準備をお願いします。<br>
+        面談は「給付金サポートデスク」からLINE通話でおかけします。
       </p>
 
       <div class="box" id="completeBox"></div>
 
       <section class="line-section">
-        <span class="required">LINE送信必須</span>
-        <h2>LINEで予約情報を送信してください</h2>
+        <span class="required">LINEでの送信が必要です</span>
+        <h2>通話用LINEを追加してください</h2>
+
+        <p class="lead">
+          「給付金サポートデスク」は、最初に追加いただいた公式LINEとは別の通話用窓口です。
+        </p>
 
         <ol class="steps">
           <li>下の緑色のボタンを押します。</li>
-          <li>送信内容が自動でコピーされ、LINEの友だち追加画面が開きます。</li>
-          <li>友だち追加後、トーク画面に貼り付けて送信してください。</li>
+          <li>予約情報がコピーされ、「給付金サポートデスク」の友だち追加画面が開きます。</li>
+          <li>友だち追加後、トーク画面に予約情報を貼り付けて送信してください。</li>
         </ol>
+
+        <p class="lead">
+          友だち追加だけでは確認できないため、予約情報の送信までお願いします。
+        </p>
 
         <div class="message-preview" id="messagePreview"></div>
 
         <button type="button" class="button line-button" id="lineButton">
-          送信内容をコピーしてLINEを追加
+          予約情報をコピーして通話用LINEを追加
         </button>
 
         <div class="status" id="copyStatus" aria-live="polite"></div>
@@ -184,7 +193,7 @@
   </div>
 
   <script>
-    const LINE_FRIEND_URL = "https://line.me/ti/p/Ff8603j4Mb";
+    const LINE_FRIEND_URL = "https://line.me/ti/p/aZn4JHxcLC";
 
     const params = new URLSearchParams(window.location.search);
     const bookingDate = params.get("bookingDate") || "";
@@ -284,9 +293,9 @@
       const copied = await copyText(lineMessage);
 
       if (copied) {
-        setStatus("送信内容をコピーしました。LINEを開きます。");
+        setStatus("予約情報をコピーしました。通話用LINEを開きます。");
       } else {
-        setStatus("自動コピーできませんでした。送信内容を確認してLINEを開きます。", true);
+        setStatus("自動コピーできませんでした。表示された予約情報を確認して通話用LINEを開きます。", true);
       }
 
       window.setTimeout(() => {
